@@ -8,6 +8,5 @@
     <string name="tomatoes">Tomatoes</string>
     <string name="title_activity_game_setting">GameSettingActivity</string>
     <string name="title_activity_hunting">HuntingActivity</string>
-
-
+    <string name="title_activity_login">Login</string>
 </resources>

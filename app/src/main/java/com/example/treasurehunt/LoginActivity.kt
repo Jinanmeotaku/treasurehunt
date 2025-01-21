@@ -1,75 +1,32 @@
-//package com.example.treasurehunt
-//
-//import android.content.Intent
-//import android.os.Bundle
-//import android.widget.Button
-//import androidx.appcompat.app.AppCompatActivity
-//import com.google.android.gms.auth.api.signin.GoogleSignIn
-//import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-//import com.google.android.gms.auth.api.signin.GoogleSignInClient
-//import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-//import com.google.android.gms.tasks.Task
-//
-//class LoginActivity : AppCompatActivity() {
-//
-//    private lateinit var googleSignInClient: GoogleSignInClient
-//    private val RC_SIGN_IN = 100
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.login_page)
-//
-//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestEmail()
-//            .build()
-//
-//        googleSignInClient = GoogleSignIn.getClient(this, gso)
-//
-//        // Check if already signed in
-//        val account = GoogleSignIn.getLastSignedInAccount(this)
-//        if (account != null) {
-//            startActivity(Intent(this, MainActivity::class.java))
-//            finish()
-//        }
-//
-//        findViewById<Button>(R.id.btn_google_sign_in).setOnClickListener {
-//            signIn()
-//        }
-//    }
-//
-//    private fun signIn() {
-//        val signInIntent = googleSignInClient.signInIntent
-//        startActivityForResult(signInIntent, RC_SIGN_IN)
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == RC_SIGN_IN) {
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-//            handleSignInResult(task)
-//        }
-//    }
-//
-//    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-//        try {
-//            // Explicitly specify ApiException as the expected exception type
-//            val account = completedTask.getResult(ApiException::class.java)
-//
-//            // Successfully signed in
-//            val displayName = account?.displayName ?: "Unknown"
-//            val email = account?.email ?: "No email"
-//
-//            // Use the retrieved information
-//            Toast.makeText(this, "Welcome, $displayName!", Toast.LENGTH_SHORT).show()
-//
-//            // Navigate to MainActivity
-//            startActivity(Intent(this, MainActivity::class.java))
-//            finish()
-//        } catch (e: ApiException) {
-//            // Handle the exception properly
-//            Toast.makeText(this, "Sign-in failed: ${e.statusCode}", Toast.LENGTH_SHORT).show()
-//            e.printStackTrace()
-//        }
-//    }
-//
-//}
+package com.example.treasurehunt
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
+class LoginActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.login_page) // Make sure this matches your XML file name
+
+        val emailEditText: EditText = findViewById(R.id.emailEditText)
+        val passwordEditText: EditText = findViewById(R.id.passwordEditText)
+        val loginButton: Button = findViewById(R.id.loginButton)
+
+        loginButton.setOnClickListener {
+            val email = emailEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Email and password cannot be empty", Toast.LENGTH_SHORT).show()
+            } else {
+                // Here you can handle the successful login
+                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
+                // Next steps could include navigating to another screen or storing the login status
+            }
+        }
+    }
+}
