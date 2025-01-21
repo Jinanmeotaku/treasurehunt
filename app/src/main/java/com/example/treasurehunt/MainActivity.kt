@@ -95,31 +95,35 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main) // Make sure this is the correct layout file for MainActivity
 
-        // Check login status
+        // Check if the user is logged in
         if (!isLoggedIn()) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            finish()
-            return
+            finish() // Prevents returning to this activity without being logged in
+            return // Stops further execution of the onCreate method
         }
 
-        val startButton = findViewById<Button>(R.id.startButton)
-        startButton.setOnClickListener {
-            // Navigate to GameSettingActivity
+        // Initialize the button to navigate to GameSettingActivity
+        val startGameSettingButton = findViewById<Button>(R.id.startGameSettingButton)
+        startGameSettingButton.setOnClickListener {
+            // Start GameSettingActivity
             val intent = Intent(this, GameSettingActivity::class.java)
             startActivity(intent)
         }
-        // Navigate to Hunting Activity
+
+        // Initialize the button to navigate to HuntingActivity
         val startHuntingButton = findViewById<Button>(R.id.startHuntingButton)
         startHuntingButton.setOnClickListener {
+            // Start HuntingActivity
             val intent = Intent(this, HuntingActivity::class.java)
             startActivity(intent)
         }
     }
 
     private fun isLoggedIn(): Boolean {
+        // Check login status from SharedPreferences
         val sharedPreferences = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean("LoggedIn", false)
     }
