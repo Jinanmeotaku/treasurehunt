@@ -31,7 +31,7 @@
 
         <!-- LoginActivity for user authentication -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.theme.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
