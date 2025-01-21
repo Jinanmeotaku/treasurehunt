@@ -85,7 +85,7 @@ class HuntingActivity : AppCompatActivity() {
                     this, cameraSelector, preview, imageCapture
                 )
             } catch (exc: Exception) {
-                Log.e("HuntingActivity", "Camera binding failed: ${exc.message}")
+                Log.e("com.example.treasurehunt.HuntingActivity", "Camera binding failed: ${exc.message}")
                 Toast.makeText(this, "Failed to bind camera use cases", Toast.LENGTH_SHORT).show()
             }
         }, ContextCompat.getMainExecutor(this))

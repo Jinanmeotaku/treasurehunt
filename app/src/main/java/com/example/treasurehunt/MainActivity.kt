@@ -85,18 +85,25 @@
 //
 package com.example.treasurehunt
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.treasurehunt.ui.theme.GameSettingActivity
-import com.example.treasurehunt.ui.theme.HuntingActivity
+import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Check login status
+        if (!isLoggedIn()) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
 
         val startButton = findViewById<Button>(R.id.startButton)
         startButton.setOnClickListener {
@@ -110,5 +117,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HuntingActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun isLoggedIn(): Boolean {
+        val sharedPreferences = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean("LoggedIn", false)
     }
 }
