@@ -63,7 +63,9 @@ dependencies {
     // adding card view dependency
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.camera.core)
-  //  implementation(libs.com.google.firebase.firebase.ml.vision)
+    implementation(libs.vision.common)
+    implementation(libs.image.labeling.default.common)
+    //  implementation(libs.com.google.firebase.firebase.ml.vision)
     //testing dependency
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,7 +1,6 @@
 package com.example.treasurehunt.ui.theme
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -21,72 +20,36 @@ import java.io.File
 import java.io.IOException
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import com.example.treasurehunt.model.Hint
 
 import java.io.FileOutputStream
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.label.ImageLabeling
-import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 
 class HuntingActivity : AppCompatActivity() {
 
     private lateinit var previewView: PreviewView
     private lateinit var imageCapture: ImageCapture
-    private lateinit var hintsContainer: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.hunting)
 
         previewView = findViewById(R.id.previewView)
-        hintsContainer = findViewById(R.id.hintsContainer)
-        // Add hints dynamically
-        val hints = listOf(
-            Hint(R.drawable.tomatoes_image, "I turned black, so people don't like me."),
-            Hint(R.drawable.tomatoes_image, "Sprouts are growing on my body, so people don't like me."),
-            Hint(R.drawable.tomatoes_image, "I'm too green, so nobody wants me.")
-        )
-        updateHints(hints)
+
         // Check and request camera permission
         checkCameraPermission()
-        requestCameraPermission()
 
         val loadImageButton = findViewById<Button>(R.id.loadImageButton)
-//        loadImageButton.setOnClickListener {
-//            val bitmap = getImageFromResources(R.drawable.tomatoes_image) // Load the image
-//            analyzeImageWithMLKit(bitmap) // Analyze the loaded image
-//        }
-//        loadImageButton.setOnClickListener {
-//            val imageResource = R.drawable.tomatoes_image // The image you're analyzing
-//            val bitmap = getImageFromResources(imageResource) // Load the image from resources
-//            val correctLabels = imageLabels[imageResource] ?: listOf() // Fetch the acceptable labels list
-//
-//            analyzeImageWithMLKit(bitmap, correctLabels) // Pass the list of acceptable labels
-//        }
+        loadImageButton.setOnClickListener {
+            // Load image from resources
+            val bitmap = getImageFromResources(R.drawable.tomatoes_image) // Replace with your drawable ID
+            val file = bitmapToFile(bitmap)
+            sendPhotoToApi(file)
+        }
 
         val captureButton = findViewById<Button>(R.id.captureButton)
         captureButton.setOnClickListener {
             capturePhoto()
         }
     }
-    private fun updateHints(hints: List<Hint>) {
-        hintsContainer.removeAllViews() // Clear previous hints
-
-        for (hint in hints) {
-            val hintView = layoutInflater.inflate(R.layout.hint_item, hintsContainer, false)
-
-            val imageView = hintView.findViewById<ImageView>(R.id.hintImage)
-            val textView = hintView.findViewById<TextView>(R.id.hintText)
-
-            imageView.setImageResource(hint.imageRes)
-            textView.text = hint.text
-
-            hintsContainer.addView(hintView)
-        }
-    }
-
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED
@@ -118,32 +81,34 @@ class HuntingActivity : AppCompatActivity() {
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
 
-            // Set up the preview use case
             val preview = Preview.Builder().build().also {
-                it.surfaceProvider =
-                    previewView.surfaceProvider  // Ensure `previewView` is initialized
+                it.surfaceProvider = previewView.surfaceProvider
+
+//                it.setSurfaceProvider(previewView.surfaceProvider)
             }
 
-            // Initialize ImageCapture
-            imageCapture = ImageCapture.Builder().build() // This is crucial!
+            imageCapture = ImageCapture.Builder().build()
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                // Bind use cases to the camera
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
-                    this,
-                    CameraSelector.DEFAULT_BACK_CAMERA, // Choose the back camera
-                    preview,
-                    imageCapture // Bind `imageCapture` here
+                    this, cameraSelector, preview, imageCapture
                 )
             } catch (exc: Exception) {
-                Log.e("CameraX", "Use case binding failed", exc)
+                Log.e("com.example.treasurehunt.HuntingActivity", "Camera binding failed: ${exc.message}")
+                Toast.makeText(this, "Failed to bind camera use cases", Toast.LENGTH_SHORT).show()
             }
         }, ContextCompat.getMainExecutor(this))
     }
 
+
     private fun capturePhoto() {
-        val photoFile = File(cacheDir, "${System.currentTimeMillis()}.jpg")
+        val photoFile = File(
+            cacheDir,
+            "${System.currentTimeMillis()}.jpg"
+        )
+
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
         imageCapture.takePicture(
@@ -151,78 +116,31 @@ class HuntingActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    // Decode the saved image into a Bitmap
-                    val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
-                    Log.d("CameraX", "Photo captured and saved to: ${photoFile.absolutePath}")
-
-                    if (bitmap != null) {
-                        // Analyze the captured bitmap
-                        //val correctLabels = listOf("Tomato", "Vegetable", "Food", "Plant")
-                        // Pass the bitmap to Firebase ML Kit for processing
-                       // analyzeImageWithMLKit(bitmap, listOf("Tomato","Vegetable","Food","Plant")  )
-                        val correctLabels = listOf("Tomato", "Vegetable", "Food", "Plant","Human","Smile","Fast food")
-                        analyzeImageWithMLKit(bitmap, correctLabels)
-                    } else {
-                        Log.e("CameraX", "Failed to decode captured image.")
-                    }
+                    // Once photo is saved, send it to the API
+                    sendPhotoToApi(photoFile)
                 }
 
                 override fun onError(exc: ImageCaptureException) {
-                    Log.e("CameraX", "Photo capture failed: ${exc.message}")
+                    Toast.makeText(this@HuntingActivity, "Photo capture failed: ${exc.message}", Toast.LENGTH_SHORT).show()
+                    Log.d("HuntingActivity", "Photo capture failed: ${exc.message}")
                 }
             }
         )
     }
 
 
-//    private val imageLabels = mapOf(
-//        R.drawable.tomatoes_image to listOf("Tomato", "Vegetable", "Food", "Plant"),
-////        "Apple" to listOf("Apple", "Fruit"),
-////        "Banana" to listOf("Banana", "Fruit")
-//    )
-//    val correctLabel = imageLabels[R.drawable.tomatoes_image] ?: ""
-    private fun navigateToNextPage() {
-        val intent = Intent(this, GameSettingActivity::class.java)
-        startActivity(intent)
-    }
-
-    private val confidenceThreshold = 0.5f // Adjust as needed
-    private fun analyzeImageWithMLKit(bitmap: Bitmap, correctLabels: List<String>) {
-        val inputImage = InputImage.fromBitmap(bitmap, 0)
-        val labeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
-
-        Log.d("MLKit", "Starting image analysis...")
-
-        labeler.process(inputImage)
-            .addOnSuccessListener { labels ->
-                Log.d("MLKit", "Image analysis successful. Labels received:")
-                for (label in labels) {
-                    Log.d("MLKit", "Predicted label: ${label.text}, Confidence: ${label.confidence}")
-                }
-
-                val matchFound = labels.any { label ->
-                    val isMatch = correctLabels.contains(label.text)
-                    Log.d("MLKit", "Checking label: ${label.text}. Match found: $isMatch")
-                    isMatch
-                }
-
-                if (matchFound) {
-                    Toast.makeText(this, "Success! Moving to the next level.", Toast.LENGTH_SHORT).show()
-                    navigateToNextPage()
-                } else {
-                    Toast.makeText(this, "No match found. Try again!", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener { e ->
-                Log.e("MLKit", "Image labeling failed: ${e.message}")
-            }
-    }
-
-
     private fun getImageFromResources(resourceId: Int): Bitmap {
-        return BitmapFactory.decodeResource(resources, R.drawable.tomatoes_image)
+        return BitmapFactory.decodeResource(resources,R.drawable.tomatoes_image)
     }
-
+    // Function to convert Bitmap to File
+//    private fun bitmapToFile(bitmap: Bitmap, fileName: String): File {
+//        val file = File(cacheDir, fileName)
+//        val outputStream = FileOutputStream(file)
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+//        outputStream.flush()
+//        outputStream.close()
+//        return file
+//    }
     private fun bitmapToFile(bitmap: Bitmap): File {
         val file = File(cacheDir, "tomatoes_image.jpg")
         val outputStream = FileOutputStream(file)
@@ -231,9 +149,94 @@ class HuntingActivity : AppCompatActivity() {
         outputStream.close()
         return file
     }
+//    private fun sendPhotoToApi(photoFile: File) {
+//        // Create a RequestBody with the file
+//        val requestBody = photoFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+//        val multipartBodyPart = MultipartBody.Part.createFormData(
+//            "file", // The parameter name expected by the API
+//            photoFile.name,
+//            requestBody
+//        )
+//
+//        // Create a MultipartBody containing the part
+//        val multipartBody = MultipartBody.Builder()
+//            .setType(MultipartBody.FORM)
+//            .addPart(multipartBodyPart)
+//            .build()
+//
+//        // Use the MultipartBody with the Request.Builder
+//        val client = OkHttpClient()
+//        val request = Request.Builder()
+//            .url("https://your-api-endpoint.com/analyze") // Replace with your API URL
+//            .post(multipartBody) // Use the MultipartBody here
+//            .build()
+//
+//        client.newCall(request).enqueue(object : Callback {
+//            override fun onFailure(call: Call, e: IOException) {
+//                runOnUiThread {
+//                    Toast.makeText(this@HuntingActivity, "Failed to send photo: ${e.message}", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onResponse(call: Call, response: Response) {
+//                if (response.isSuccessful) {
+//                    runOnUiThread {
+//                        Toast.makeText(this@HuntingActivity, "Photo sent successfully", Toast.LENGTH_SHORT).show()
+//                    }
+//                } else {
+//                    runOnUiThread {
+//                        Toast.makeText(this@HuntingActivity, "Failed to analyze photo: ${response.message}", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//        })
+//    }
+private fun sendPhotoToApi(photoFile: File) {
+    // Create a RequestBody with the file
+    val requestBody = photoFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
 
+    // Create a MultipartBody with the file
+    val multipartBody = MultipartBody.Builder()
+        .setType(MultipartBody.FORM)
+        .addFormDataPart(
+            "file", // The parameter name expected by the API
+            photoFile.name,
+            requestBody
+        )
+        .build()
+
+    // Use OkHttp to send the request
+    val client = OkHttpClient()
+    val request = Request.Builder()
+        .url("https://your-api-endpoint.com/analyze") // Replace with your API URL
+        .post(multipartBody) // Pass the multipart body
+        .build()
+
+    client.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            runOnUiThread {
+                Toast.makeText(this@HuntingActivity, "Failed to send photo: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            if (response.isSuccessful) {
+                val responseBody = response.body?.string()
+                Log.d("API_RESPONSE", "Success: $responseBody")
+                runOnUiThread {
+                    Toast.makeText(this@HuntingActivity, "Photo sent successfully: $responseBody", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Log.e("API_RESPONSE", "Failure: ${response.code} - ${response.message}")
+                runOnUiThread {
+                    Toast.makeText(this@HuntingActivity, "Failed to analyze photo: ${response.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    })
 }
 
 
+}
 
 

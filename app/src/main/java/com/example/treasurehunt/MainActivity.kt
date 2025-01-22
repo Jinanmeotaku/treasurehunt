@@ -87,10 +87,9 @@ package com.example.treasurehunt
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.treasurehunt.ui.theme.GameSettingActivity
-import com.example.treasurehunt.ui.theme.HuntingActivity
+import android.widget.Button
+import com.example.treasurehunt.ui.theme.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -98,16 +97,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val startButton = findViewById<Button>(R.id.startButton)
-        startButton.setOnClickListener {
-            // Navigate to GameSettingActivity
-            val intent = Intent(this, GameSettingActivity::class.java)
-            startActivity(intent)
-        }
-        // Navigate to Hunting Activity
-        val startHuntingButton = findViewById<Button>(R.id.startHuntingButton)
-        startHuntingButton.setOnClickListener {
-            val intent = Intent(this, HuntingActivity::class.java)
+        val loginButton = findViewById<Button>(R.id.loginButton)
+        loginButton.setOnClickListener {
+            // Start LoginActivity
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }

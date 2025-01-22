@@ -33,23 +33,32 @@
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:background="@color/white">
 
-    <Button
-        android:id="@+id/startButton"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Treasure Hunt"
-        android:layout_centerInParent="true" />
-    <Button
-        android:id="@+id/startHuntingButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Hunting"
-        android:layout_below="@id/startButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
+        android:text="@string/whine_a_way_waw"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"/>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="319dp"
+        android:layout_height="wrap_content"
+        android:text="@string/login_button"
+        android:layout_margin="8dp"
+        android:background="@color/colorAccent"
+        android:textColor="@color/black"/>
+
+</LinearLayout>

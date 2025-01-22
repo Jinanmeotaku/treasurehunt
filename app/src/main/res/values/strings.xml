@@ -8,6 +8,12 @@
     <string name="tomatoes">Tomatoes</string>
     <string name="title_activity_game_setting">GameSettingActivity</string>
     <string name="title_activity_hunting">HuntingActivity</string>
+    <string name="login_button">Login</string>
+    <string name="whine_a_way_waw">Whine-A-Way (WAW)</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="whine_a_way">Whine A Way</string>
+    <string name="waw">WAW</string>
 
 
 </resources>
