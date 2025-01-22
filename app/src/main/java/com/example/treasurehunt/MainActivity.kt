@@ -91,6 +91,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import com.example.treasurehunt.ui.theme.LoginActivity
+import com.example.treasurehunt.ui.theme.GameSettingActivity
+import com.example.treasurehunt.ui.theme.HuntingActivity
+
 
 class MainActivity : AppCompatActivity() {
 
