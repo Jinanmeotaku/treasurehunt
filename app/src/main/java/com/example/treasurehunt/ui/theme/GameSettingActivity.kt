@@ -20,6 +20,9 @@ class GameSettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_setting)
 
+        // Hide the action bar
+        supportActionBar?.hide()
+
         // Initialize RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2) // 2 columns

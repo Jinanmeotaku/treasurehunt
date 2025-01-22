@@ -32,6 +32,9 @@ class HuntingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.hunting)
 
+        // Hide the action bar
+        supportActionBar?.hide()
+
         previewView = findViewById(R.id.previewView)
 
         // Check and request camera permission
@@ -52,13 +55,13 @@ class HuntingActivity : AppCompatActivity() {
     }
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
+            != PackageManager.PERMISSION_GRANTED) {
             requestCameraPermission()
         } else {
             startCamera()
         }
     }
+
 
     private fun requestCameraPermission() {
         val requestPermissionLauncher = registerForActivityResult(
@@ -71,7 +74,6 @@ class HuntingActivity : AppCompatActivity() {
                 Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
             }
         }
-
         requestPermissionLauncher.launch(Manifest.permission.CAMERA)
     }
 
@@ -132,15 +134,7 @@ class HuntingActivity : AppCompatActivity() {
     private fun getImageFromResources(resourceId: Int): Bitmap {
         return BitmapFactory.decodeResource(resources,R.drawable.tomatoes_image)
     }
-    // Function to convert Bitmap to File
-//    private fun bitmapToFile(bitmap: Bitmap, fileName: String): File {
-//        val file = File(cacheDir, fileName)
-//        val outputStream = FileOutputStream(file)
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-//        outputStream.flush()
-//        outputStream.close()
-//        return file
-//    }
+
     private fun bitmapToFile(bitmap: Bitmap): File {
         val file = File(cacheDir, "tomatoes_image.jpg")
         val outputStream = FileOutputStream(file)
