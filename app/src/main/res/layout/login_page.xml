@@ -4,7 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center_horizontal">
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/treasureHuntTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/treasure_hunt"
+        android:textSize="24sp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_horizontal"/>
 
     <EditText
         android:id="@+id/emailEditText"
@@ -32,6 +41,8 @@
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_button"/>
+        android:text="@string/login_button"
+        android:gravity="center_horizontal"/>
 
 </LinearLayout>
+
