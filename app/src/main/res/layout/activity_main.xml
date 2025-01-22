@@ -54,26 +54,11 @@
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="match_parent"
+        android:layout_width="319dp"
         android:layout_height="wrap_content"
-<<<<<<< HEAD
         android:text="@string/login_button"
         android:layout_margin="8dp"
-        android:background="@color/green"
-        android:textColor="@color/white"/>
+        android:background="@color/colorAccent"
+        android:textColor="@color/black"/>
 
 </LinearLayout>
-=======
-        android:text="Start Treasure Hunt"
-        android:layout_centerInParent="true" />
-    <Button
-        android:id="@+id/startHuntingButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Hunting"
-        android:layout_below="@id/startButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
-
-</RelativeLayout>
->>>>>>> Hawraa-treasure_hunt
