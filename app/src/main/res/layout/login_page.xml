@@ -3,49 +3,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center">
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:background="@android:color/white">
 
+    <!-- Title: Whine A Way -->
     <TextView
-        android:id="@+id/treasureHuntTitle"
-        android:layout_width="262dp"
-        android:layout_height="wrap_content"
-        android:text="@string/treasure_hunt"
-        android:textSize="24sp"
-        android:layout_marginBottom="24dp"
-        android:gravity="center_horizontal"
-        android:rotationX="40"
-        android:rotationY="11"
-        android:visibility="visible" />
-
-    <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="339dp"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:hint="@string/email_hint"
-        android:inputType="textEmailAddress"
-        android:autofillHints="emailAddress"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp" />
-
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="341dp"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:hint="@string/password_hint"
-        android:inputType="textPassword"
-        android:autofillHints="password"
-        android:padding="12dp"
-        android:layout_marginBottom="24dp" />
-
-    <Button
-        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/whine_a_way"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"/>
+
+    <!-- Subtitle: WAW -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/waw"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"/>
+
+    <!-- Email input field -->
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_hint"
+        android:inputType="textEmailAddress"
+        android:background="@android:drawable/editbox_background"
+        android:padding="12dp"
+        android:minHeight="48dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Password input field -->
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="292dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/password_hint"
+        android:inputType="textPassword"
+        android:background="@android:drawable/editbox_background"
+        android:padding="12dp"
+        android:minHeight="48dp"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Login button -->
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="295dp"
+        android:layout_height="wrap_content"
         android:text="@string/login_button"
-        android:gravity="center_horizontal"/>
+        android:background="@android:color/holo_blue_dark"
+        android:textColor="@android:color/black"
+        android:minHeight="48dp"
+        android:layout_marginBottom="16dp" />
 
 </LinearLayout>
-

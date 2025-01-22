@@ -50,7 +50,7 @@ class GameSettingActivity : AppCompatActivity() {
         // Find the button and set an OnClickListener
         val startHuntingButton = findViewById<Button>(R.id.startHuntingButton)
         startHuntingButton.setOnClickListener {
-            // Navigate to com.example.treasurehunt.HuntingActivity
+            // Navigate to hunting activity
             val intent = Intent(this, HuntingActivity::class.java)
             startActivity(intent)
         }

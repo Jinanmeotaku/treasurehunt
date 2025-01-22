@@ -33,8 +33,8 @@ class LoginActivity : AppCompatActivity() {
 
                 Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
 
-                // Navigate back to MainActivity (or another activity)
-                startActivity(Intent(this, MainActivity::class.java))
+                // Navigate back to GameSettingActivity
+                startActivity(Intent(this, GameSettingActivity::class.java))
                 finish()
             }
         }

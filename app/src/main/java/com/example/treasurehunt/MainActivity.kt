@@ -85,50 +85,23 @@
 //
 package com.example.treasurehunt
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import com.example.treasurehunt.ui.theme.LoginActivity
-import com.example.treasurehunt.ui.theme.GameSettingActivity
-import com.example.treasurehunt.ui.theme.HuntingActivity
-
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // Make sure this is the correct layout file for MainActivity
+        setContentView(R.layout.activity_main)
 
-        // Check if the user is logged in
-        if (!isLoggedIn()) {
+        val loginButton = findViewById<Button>(R.id.loginButton)
+        loginButton.setOnClickListener {
+            // Start LoginActivity
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            finish() // Prevents returning to this activity without being logged in
-            return // Stops further execution of the onCreate method
         }
-
-        // Initialize the button to navigate to GameSettingActivity
-        val startGameSettingButton = findViewById<Button>(R.id.startGameSettingButton)
-        startGameSettingButton.setOnClickListener {
-            // Start GameSettingActivity
-            val intent = Intent(this, GameSettingActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Initialize the button to navigate to HuntingActivity
-        val startHuntingButton = findViewById<Button>(R.id.startHuntingButton)
-        startHuntingButton.setOnClickListener {
-            // Start HuntingActivity
-            val intent = Intent(this, HuntingActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
-    private fun isLoggedIn(): Boolean {
-        // Check login status from SharedPreferences
-        val sharedPreferences = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean("LoggedIn", false)
     }
 }

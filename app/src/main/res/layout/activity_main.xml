@@ -35,27 +35,30 @@
 <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-android:padding="16dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/whine_a_way_waw"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"/>
 
     <Button
-        android:id="@+id/startGameSettingButton"
+        android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxWidth="300dp"
-        android:text="@string/start_game_settings"
-        android:layout_margin="8dp" />
-
-    <Button
-        android:id="@+id/startHuntingButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxWidth="300dp"
-        android:text="@string/start_hunting"
-        android:layout_margin="8dp" />
-
+        android:text="@string/login_button"
+        android:layout_margin="8dp"
+        android:background="@color/green"
+        android:textColor="@color/white"/>
 
 </LinearLayout>
-
